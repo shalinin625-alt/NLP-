@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 .env
 NLP-/
+bert_requirement_classifier/model.safetensors

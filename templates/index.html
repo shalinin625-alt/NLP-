@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IntelliReq | AI Requirement Analyzer</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #080b14;
+            --card: #111624;
+            --card2: #151b2d;
+            --text: #f5f7ff;
+            --muted: #9299ad;
+            --border: rgba(255,255,255,0.08);
+            --primary: #7c5cff;
+            --primary2: #5d7cff;
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --cyan: #06b6d4;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(124,92,255,0.18), transparent 28%),
+                radial-gradient(circle at 90% 20%, rgba(6,182,212,0.12), transparent 25%),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background glow */
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 450px;
+            height: 450px;
+            background: rgba(124,92,255,0.08);
+            filter: blur(100px);
+            border-radius: 50%;
+            top: 30%;
+            left: 40%;
+            pointer-events: none;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            height: 76px;
+            padding: 0 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            background: rgba(8,11,20,0.78);
+            backdrop-filter: blur(18px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 21px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary2));
+            box-shadow: 0 8px 30px rgba(124,92,255,0.35);
+            font-size: 20px;
+        }
+
+        .logo span {
+            color: #a99aff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-btn {
+            padding: 10px 18px;
+            border-radius: 10px;
+            background: rgba(124,92,255,0.12);
+            border: 1px solid rgba(124,92,255,0.25);
+            color: #c7bdff !important;
+        }
+
+        /* HERO */
+
+        .hero {
+            width: 86%;
+            max-width: 1250px;
+            margin: auto;
+            padding: 85px 0 55px;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 13px;
+            border-radius: 30px;
+            background: rgba(124,92,255,0.10);
+            border: 1px solid rgba(124,92,255,0.22);
+            color: #bdb2ff;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .pulse {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 10px var(--green);
+        }
+
+        h1 {
+            font-size: clamp(42px, 5vw, 70px);
+            line-height: 1.02;
+            letter-spacing: -3px;
+            margin-bottom: 25px;
+        }
+
+        h1 .gradient {
+            background: linear-gradient(
+                90deg,
+                #9d88ff,
+                #6c8cff,
+                #49d7e8
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text {
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.8;
+            max-width: 650px;
+            margin-bottom: 35px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn {
+            border: none;
+            cursor: pointer;
+            padding: 15px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                var(--primary2)
+            );
+            box-shadow: 0 10px 30px rgba(124,92,255,0.3);
+            transition: 0.3s;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(124,92,255,0.42);
+        }
+
+        .secondary-btn {
+            padding: 15px 24px;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+        }
+
+        /* AI VISUAL */
+
+        .ai-card {
+            position: relative;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(124,92,255,0.13),
+                    rgba(6,182,212,0.04)
+                ),
+                var(--card);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+        }
+
+        .ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .ai-title {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .online {
+            font-size: 11px;
+            color: var(--green);
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .code-window {
+            background: #090c14;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 2;
+            color: #cbd5e1;
+        }
+
+        .keyword {
+            color: #a78bfa;
+        }
+
+        .string {
+            color: #67e8f9;
+        }
+
+        .comment {
+            color: #64748b;
+        }
+
+        .analysis-bar {
+            margin-top: 20px;
+        }
+
+        .analysis-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .bar {
+            height: 7px;
+            background: #202638;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .bar span {
+            display: block;
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--cyan));
+        }
+
+        /* STATS */
+
+        .stats {
+            width: 86%;
+            max-width: 1250px;
+            margin: 15px auto 70px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .stat {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 16px;
+            transition: 0.3s;
+        }
+
+        .stat:hover {
+            transform: translateY(-4px);
+            border-color: rgba(124,92,255,0.3);
+        }
+
+        .stat-icon {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .stat-number {
+            font-size: 25px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .stat-text {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* UPLOAD SECTION */
+
+        .upload-section {
+            width: 86%;
+            max-width: 1000px;
+            margin: auto;
+            padding-bottom: 80px;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-heading h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .upload-box {
+            border: 2px dashed rgba(124,92,255,0.35);
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(124,92,255,0.07),
+                    rgba(6,182,212,0.025)
+                );
+            border-radius: 24px;
+            padding: 55px 30px;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .upload-box:hover,
+        .upload-box.dragover {
+            border-color: var(--primary);
+            background: rgba(124,92,255,0.09);
+            transform: translateY(-3px);
+        }
+
+        .upload-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            background: rgba(124,92,255,0.12);
+        }
+
+        .upload-box h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .upload-box p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .file-label {
+            display: inline-block;
+            padding: 13px 22px;
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                var(--primary2)
+            );
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 18px;
+            color: #b7adff;
+            font-size: 13px;
+            min-height: 20px;
+        }
+
+        .submit-btn {
+            margin-top: 22px;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            background: linear-gradient(
+                135deg,
+                #6246ea,
+                #4968e8
+            );
+            display: none;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* FEATURES */
+
+        .features {
+            width: 86%;
+            max-width: 1250px;
+            margin: auto;
+            padding-bottom: 90px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .feature {
+            padding: 25px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            transition: 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            border-color: rgba(124,92,255,0.3);
+        }
+
+        .feature-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(124,92,255,0.1);
+            font-size: 21px;
+            margin-bottom: 18px;
+        }
+
+        .feature h3 {
+            font-size: 15px;
+            margin-bottom: 9px;
+        }
+
+        .feature p {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        /* FOOTER */
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 28px 7%;
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 18px;
+            color: #a99aff;
+            font-size: 13px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 7px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* MOBILE */
+
+        @media(max-width: 900px) {
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 55px;
+            }
+
+            .ai-card {
+                max-width: 650px;
+                margin: auto;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-links a:not(.nav-btn) {
+                display: none;
+            }
+        }
+
+        @media(max-width: 600px) {
+
+            nav {
+                padding: 0 5%;
+            }
+
+            .hero,
+            .stats,
+            .upload-section,
+            .features {
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 43px;
+                letter-spacing: -2px;
+            }
+
+            .hero-text {
+                font-size: 14px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+
+<nav>
+
+    <div class="logo">
+        <div class="logo-icon">🧠</div>
+        Intelli<span>Req</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#upload">Analyze</a>
+        <a href="/traceability">Traceability</a>
+        <a href="/model-comparison">Models</a>
+        <a href="#upload" class="nav-btn">Start Analysis →</a>
+    </div>
+
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div>
+
+        <div class="badge">
+            <span class="pulse"></span>
+            AI-Powered Requirement Engineering
+        </div>
+
+        <h1>
+            Turn messy requirements into
+            <span class="gradient">smart requirements.</span>
+        </h1>
+
+        <p class="hero-text">
+            IntelliReq uses NLP, Machine Learning and BERT-based
+            Deep Learning to automatically analyze software requirements,
+            detect ambiguity, identify risks, measure quality and generate
+            actionable improvements.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#upload" class="primary-btn">
+                Analyze Requirements →
+            </a>
+
+            <a href="#features" class="secondary-btn">
+                Explore Features
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI PREVIEW -->
+
+    <div class="ai-card">
+
+        <div class="ai-header">
+
+            <div class="ai-title">
+                LIVE AI ANALYSIS
+            </div>
+
+            <div class="online">
+                <span class="pulse"></span>
+                BERT Online
+            </div>
+
+        </div>
+
+
+        <div class="code-window">
+
+            <div>
+                <span class="keyword">Requirement:</span>
+            </div>
+
+            <div>
+                <span class="string">
+                    "The system shall encrypt
+                    user passwords."
+                </span>
+            </div>
+
+            <br>
+
+            <div>
+                <span class="comment">
+                    // AI Classification
+                </span>
+            </div>
+
+            <div>
+                Type:
+                <span class="keyword">Security</span>
+            </div>
+
+            <div>
+                Risk:
+                <span class="keyword">Low</span>
+            </div>
+
+            <div>
+                Quality:
+                <span class="string">98%</span>
+            </div>
+
+        </div>
+
+
+        <div class="analysis-bar">
+
+            <div class="analysis-row">
+                <span>Requirement Quality</span>
+                <strong>98%</strong>
+            </div>
+
+            <div class="bar">
+                <span style="width:98%"></span>
+            </div>
+
+        </div>
+
+
+        <div class="analysis-bar">
+
+            <div class="analysis-row">
+                <span>BERT Confidence</span>
+                <strong>99%</strong>
+            </div>
+
+            <div class="bar">
+                <span style="width:99%"></span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- STATS -->
+
+<section class="stats">
+
+    <div class="stat">
+
+        <div class="stat-icon">🤖</div>
+
+        <div class="stat-number">4</div>
+
+        <div class="stat-text">
+            AI / ML Classification Models
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-icon">🎯</div>
+
+        <div class="stat-number">100%</div>
+
+        <div class="stat-text">
+            BERT Test Accuracy
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-icon">⚡</div>
+
+        <div class="stat-number">99%</div>
+
+        <div class="stat-text">
+            Traditional ML Accuracy
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-icon">📊</div>
+
+        <div class="stat-number">10+</div>
+
+        <div class="stat-text">
+            Requirement Quality Checks
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- UPLOAD -->
+
+<section class="upload-section" id="upload">
+
+    <div class="section-heading">
+
+        <h2>Analyze Your Requirements</h2>
+
+        <p>
+            Upload your requirement document and let IntelliReq
+            perform complete AI-powered analysis.
+        </p>
+
+    </div>
+
+
+    <form
+        action="/upload"
+        method="POST"
+        enctype="multipart/form-data"
+        id="uploadForm"
+    >
+
+        <div
+            class="upload-box"
+            id="uploadBox"
+        >
+
+            <div class="upload-icon">
+                📄
+            </div>
+
+            <h3>
+                Drop your requirement document here
+            </h3>
+
+            <p>
+                Supports PDF, DOCX, TXT, CSV and EML files
+            </p>
+
+
+            <label
+                for="fileInput"
+                class="file-label"
+            >
+                Choose File
+            </label>
+
+
+            <input
+                type="file"
+                name="file"
+                id="fileInput"
+                accept=".pdf,.docx,.txt,.csv,.eml"
+            >
+
+
+            <div
+                class="file-name"
+                id="fileName"
+            ></div>
+
+
+            <button
+                type="submit"
+                class="submit-btn"
+                id="submitBtn"
+            >
+                🚀 Start AI Analysis
+            </button>
+
+
+            <div
+                class="loading"
+                id="loading"
+            >
+                <span class="spinner"></span>
+                IntelliReq is analyzing your requirements...
+            </div>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section
+    class="features"
+    id="features"
+>
+
+    <div class="section-heading">
+
+        <h2>Intelligent Requirement Engineering</h2>
+
+        <p>
+            Everything you need to validate and improve software requirements.
+        </p>
+
+    </div>
+
+
+    <div class="features-grid">
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🤖
+            </div>
+
+            <h3>
+                BERT Deep Learning
+            </h3>
+
+            <p>
+                Automatically classify requirements using your trained
+                BERT model with confidence scoring.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🔍
+            </div>
+
+            <h3>
+                Ambiguity Detection
+            </h3>
+
+            <p>
+                Detect vague words such as fast, easy, simple and
+                user-friendly that can cause requirement misunderstandings.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🚨
+            </div>
+
+            <h3>
+                Risk Detection
+            </h3>
+
+            <p>
+                Automatically calculate Low, Medium and High risk
+                levels based on requirement quality and issues.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ⭐
+            </div>
+
+            <h3>
+                Smart Priority
+            </h3>
+
+            <p>
+                Identify Critical, High, Medium and Low priority
+                requirements automatically.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ⚠️
+            </div>
+
+            <h3>
+                Contradiction Detection
+            </h3>
+
+            <p>
+                Find conflicting requirements such as allowing and
+                disallowing the same system behavior.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ⭐
+            </div>
+
+            <h3>
+                Quality Scoring
+            </h3>
+
+            <p>
+                Calculate a requirement quality score based on ambiguity,
+                completeness, security and performance characteristics.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ✨
+            </div>
+
+            <h3>
+                AI-Assisted Rewriting
+            </h3>
+
+            <p>
+                Generate clearer and more measurable versions of weak
+                requirements.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🔗
+            </div>
+
+            <h3>
+                Traceability Matrix
+            </h3>
+
+            <p>
+                Track every requirement using automatically generated
+                Requirement IDs and analysis results.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                📊
+            </div>
+
+            <h3>
+                Model Comparison
+            </h3>
+
+            <p>
+                Compare Logistic Regression, SVM, Random Forest and
+                BERT performance through visual analytics.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                📥
+            </div>
+
+            <h3>
+                Export Reports
+            </h3>
+
+            <p>
+                Export analyzed requirements as CSV, Excel and professional
+                PDF reports.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🔎
+            </div>
+
+            <h3>
+                Smart Search
+            </h3>
+
+            <p>
+                Quickly search and filter requirements by type, risk,
+                priority and quality.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ✏️
+            </div>
+
+            <h3>
+                Re-analyze Requirements
+            </h3>
+
+            <p>
+                Edit a requirement and instantly run the analysis again
+                to observe the quality improvement.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div>
+        © 2026 IntelliReq
+    </div>
+
+    <div>
+        NLP • Machine Learning • BERT • Requirement Engineering
+    </div>
+
+</footer>
+
+
+<script>
+
+    const fileInput = document.getElementById("fileInput");
+    const uploadBox = document.getElementById("uploadBox");
+    const fileName = document.getElementById("fileName");
+    const submitBtn = document.getElementById("submitBtn");
+    const uploadForm = document.getElementById("uploadForm");
+    const loading = document.getElementById("loading");
+
+
+    /* SUPPORTED FILE TYPES */
+
+    const allowedExtensions = [
+        "pdf",
+        "docx",
+        "txt",
+        "csv",
+        "eml"
+    ];
+
+
+    /* FILE SELECTION */
+
+    fileInput.addEventListener("change", function () {
+
+        if (this.files.length > 0) {
+
+            const file = this.files[0];
+
+            const extension =
+                file.name.split(".").pop().toLowerCase();
+
+
+            if (!allowedExtensions.includes(extension)) {
+
+                fileName.innerHTML =
+                    "❌ Please select a PDF, DOCX, TXT, CSV or EML file.";
+
+                submitBtn.style.display = "none";
+
+                fileInput.value = "";
+
+                return;
+            }
+
+
+            fileName.innerHTML =
+                "📄 Selected: <strong>" +
+                file.name +
+                "</strong>";
+
+
+            submitBtn.style.display = "block";
+
+        }
+
+    });
+
+
+    /* DRAG ENTER */
+
+    uploadBox.addEventListener(
+        "dragover",
+        function (event) {
+
+            event.preventDefault();
+
+            uploadBox.classList.add("dragover");
+
+        }
+    );
+
+
+    /* DRAG LEAVE */
+
+    uploadBox.addEventListener(
+        "dragleave",
+        function () {
+
+            uploadBox.classList.remove("dragover");
+
+        }
+    );
+
+
+    /* DROP */
+
+    uploadBox.addEventListener(
+        "drop",
+        function (event) {
+
+            event.preventDefault();
+
+            uploadBox.classList.remove("dragover");
+
+
+            const files = event.dataTransfer.files;
+
+            if (files.length === 0) {
+                return;
+            }
+
+
+            const file = files[0];
+
+            const extension =
+                file.name.split(".").pop().toLowerCase();
+
+
+            if (!allowedExtensions.includes(extension)) {
+
+                fileName.innerHTML =
+                    "❌ Only PDF, DOCX, TXT, CSV and EML files are supported.";
+
+                submitBtn.style.display = "none";
+
+                return;
+            }
+
+
+            /*
+                Assign dropped file to input.
+            */
+
+            const dataTransfer = new DataTransfer();
+
+            dataTransfer.items.add(file);
+
+            fileInput.files = dataTransfer.files;
+
+
+            fileName.innerHTML =
+                "📄 Selected: <strong>" +
+                file.name +
+                "</strong>";
+
+
+            submitBtn.style.display = "block";
+
+        }
+    );
+
+
+    /* FORM SUBMIT */
+
+    uploadForm.addEventListener(
+        "submit",
+        function (event) {
+
+            if (!fileInput.files.length) {
+
+                event.preventDefault();
+
+                alert(
+                    "Please select a PDF, DOCX, TXT, CSV or EML file first."
+                );
+
+                return;
+
+            }
+
+
+            const file = fileInput.files[0];
+
+            const extension =
+                file.name.split(".").pop().toLowerCase();
+
+
+            if (!allowedExtensions.includes(extension)) {
+
+                event.preventDefault();
+
+                alert(
+                    "Unsupported file format. Please upload PDF, DOCX, TXT, CSV or EML."
+                );
+
+                return;
+            }
+
+
+            submitBtn.style.display = "none";
+
+            loading.style.display = "block";
+
+        }
+    );
+
+
+    /* SMOOTH SCROLL */
+
+    document.querySelectorAll(
+        'a[href^="#"]'
+    ).forEach(function (anchor) {
+
+        anchor.addEventListener(
+            "click",
+            function (event) {
+
+                const target =
+                    document.querySelector(
+                        this.getAttribute("href")
+                    );
+
+                if (target) {
+
+                    event.preventDefault();
+
+                    target.scrollIntoView({
+                        behavior: "smooth"
+                    });
+
+                }
+
+            }
+        );
+
+    });
+
+</script>
+
+</body>
+</html>

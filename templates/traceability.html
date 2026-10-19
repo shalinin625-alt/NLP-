@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Traceability Matrix | IntelliReq</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+
+            font-family:
+                Inter,
+                Arial,
+                sans-serif;
+
+            background:
+                #f5f7fb;
+
+            color:
+                #1e293b;
+        }
+
+        /* ==================================================
+           HEADER
+        ================================================== */
+
+        header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #111827,
+                    #1e293b
+                );
+
+            color: white;
+
+            padding: 20px 40px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0,0,0,0.15);
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .logo {
+
+            width: 45px;
+
+            height: 45px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+
+            font-weight: bold;
+        }
+
+        .brand h1 {
+
+            font-size: 23px;
+        }
+
+        .brand span {
+
+            font-size: 12px;
+
+            color: #cbd5e1;
+        }
+
+        .nav {
+
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+
+            text-decoration: none;
+
+            color: #e2e8f0;
+
+            padding: 9px 14px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+        }
+
+        .nav a:hover {
+
+            background:
+                rgba(255,255,255,0.12);
+        }
+
+        .nav .active {
+
+            background:
+                #6366f1;
+
+            color: white;
+        }
+
+        /* ==================================================
+           CONTAINER
+        ================================================== */
+
+        .container {
+
+            width: 95%;
+
+            max-width: 1450px;
+
+            margin: 30px auto;
+        }
+
+        .page-title {
+
+            margin-bottom: 25px;
+        }
+
+        .page-title h2 {
+
+            font-size: 30px;
+
+            color: #0f172a;
+
+            margin-bottom: 7px;
+        }
+
+        .page-title p {
+
+            color: #64748b;
+
+            font-size: 15px;
+        }
+
+        /* ==================================================
+           SUMMARY CARDS
+        ================================================== */
+
+        .summary-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(180px, 1fr)
+                );
+
+            gap: 16px;
+
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(15,23,42,0.07);
+
+            border:
+                1px solid #e2e8f0;
+        }
+
+        .summary-label {
+
+            color: #64748b;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+            color: #0f172a;
+        }
+
+        .summary-small {
+
+            font-size: 12px;
+
+            color: #94a3b8;
+
+            margin-top: 5px;
+        }
+
+        /* ==================================================
+           CONTROLS
+        ================================================== */
+
+        .controls {
+
+            background: white;
+
+            padding: 18px;
+
+            border-radius: 14px;
+
+            margin-bottom: 20px;
+
+            display: flex;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+
+            align-items: center;
+
+            box-shadow:
+                0 4px 15px
+                rgba(15,23,42,0.06);
+        }
+
+        .controls input,
+        .controls select {
+
+            padding: 11px 13px;
+
+            border:
+                1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            outline: none;
+
+            background: white;
+        }
+
+        .controls input {
+
+            min-width: 280px;
+
+            flex: 1;
+        }
+
+        .controls input:focus,
+        .controls select:focus {
+
+            border-color:
+                #6366f1;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(99,102,241,0.12);
+        }
+
+        .btn {
+
+            border: none;
+
+            background:
+                #6366f1;
+
+            color: white;
+
+            padding: 11px 16px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            display: inline-block;
+        }
+
+        .btn:hover {
+
+            background:
+                #4f46e5;
+        }
+
+        .btn.secondary {
+
+            background:
+                #475569;
+        }
+
+        /* ==================================================
+           TABLE
+        ================================================== */
+
+        .table-card {
+
+            background: white;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 4px 20px
+                rgba(15,23,42,0.08);
+
+            overflow: hidden;
+
+            border:
+                1px solid #e2e8f0;
+        }
+
+        .table-header {
+
+            padding: 20px;
+
+            border-bottom:
+                1px solid #e2e8f0;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .table-header h3 {
+
+            font-size: 19px;
+
+            color: #0f172a;
+        }
+
+        .table-header span {
+
+            font-size: 13px;
+
+            color: #64748b;
+        }
+
+        .table-wrapper {
+
+            overflow-x: auto;
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 1150px;
+        }
+
+        th {
+
+            background:
+                #f8fafc;
+
+            color:
+                #475569;
+
+            font-size: 12px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .4px;
+
+            padding: 14px;
+
+            text-align: left;
+
+            border-bottom:
+                1px solid #e2e8f0;
+
+            white-space: nowrap;
+        }
+
+        td {
+
+            padding: 15px 14px;
+
+            border-bottom:
+                1px solid #eef2f7;
+
+            vertical-align: top;
+
+            font-size: 13px;
+        }
+
+        tr:hover td {
+
+            background:
+                #f8fafc;
+        }
+
+        .req-id {
+
+            font-weight: 700;
+
+            color:
+                #4f46e5;
+
+            white-space: nowrap;
+        }
+
+        .requirement-text {
+
+            max-width: 320px;
+
+            line-height: 1.55;
+
+            color: #334155;
+        }
+
+        /* ==================================================
+           BADGES
+        ================================================== */
+
+        .badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 5px 9px;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        .functional {
+
+            background: #e0e7ff;
+
+            color: #3730a3;
+        }
+
+        .performance {
+
+            background: #fef3c7;
+
+            color: #92400e;
+        }
+
+        .security {
+
+            background: #fee2e2;
+
+            color: #991b1b;
+        }
+
+        .usability {
+
+            background: #dcfce7;
+
+            color: #166534;
+        }
+
+        .low {
+
+            background: #dcfce7;
+
+            color: #166534;
+        }
+
+        .medium {
+
+            background: #fef3c7;
+
+            color: #92400e;
+        }
+
+        .high {
+
+            background: #fee2e2;
+
+            color: #991b1b;
+        }
+
+        .critical {
+
+            background: #7f1d1d;
+
+            color: white;
+        }
+
+        /* ==================================================
+           QUALITY
+        ================================================== */
+
+        .quality-box {
+
+            min-width: 110px;
+        }
+
+        .quality-number {
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+        }
+
+        .progress {
+
+            height: 7px;
+
+            width: 100%;
+
+            background:
+                #e2e8f0;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .progress-bar {
+
+            height: 100%;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+        }
+
+        /* ==================================================
+           STATUS
+        ================================================== */
+
+        .yes {
+
+            color: #dc2626;
+
+            font-weight: 700;
+        }
+
+        .no {
+
+            color: #94a3b8;
+        }
+
+        .test-count {
+
+            font-weight: 700;
+
+            color: #4f46e5;
+        }
+
+        /* ==================================================
+           EMPTY
+        ================================================== */
+
+        .empty {
+
+            text-align: center;
+
+            padding: 70px 20px;
+
+            color: #64748b;
+        }
+
+        .empty-icon {
+
+            font-size: 50px;
+
+            margin-bottom: 15px;
+        }
+
+        .empty h3 {
+
+            color: #334155;
+
+            margin-bottom: 8px;
+        }
+
+        /* ==================================================
+           FOOTER
+        ================================================== */
+
+        footer {
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+
+            padding: 30px;
+        }
+
+        /* ==================================================
+           RESPONSIVE
+        ================================================== */
+
+        @media(max-width: 800px) {
+
+            header {
+
+                padding: 15px 20px;
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .container {
+
+                width: 94%;
+            }
+
+            .page-title h2 {
+
+                font-size: 25px;
+            }
+
+            .controls input {
+
+                min-width: 100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <div class="brand">
+
+        <div class="logo">
+            IR
+        </div>
+
+        <div>
+
+            <h1>IntelliReq</h1>
+
+            <span>
+                NLP-Based Software Requirements Analysis
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <nav class="nav">
+
+        <a href="{{ url_for('index') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('results') }}">
+            Results
+        </a>
+
+        <a href="{{ url_for('traceability') }}"
+           class="active">
+            Traceability
+        </a>
+
+        <a href="{{ url_for('test_cases') }}">
+            Test Cases
+        </a>
+
+        <a href="{{ url_for('model_comparison') }}">
+            Models
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="container">
+
+
+    <div class="page-title">
+
+        <h2>
+            Requirement Traceability Matrix
+        </h2>
+
+        <p>
+            Track every requirement from identification
+            through quality analysis, risk assessment,
+            priority, and test-case coverage.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         SUMMARY
+    ================================================== -->
+
+    <div class="summary-grid">
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                Total Requirements
+            </div>
+
+            <div class="summary-value">
+                {{ summary.total }}
+            </div>
+
+            <div class="summary-small">
+                Requirements analyzed
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                Average Quality
+            </div>
+
+            <div class="summary-value">
+                {{ summary.average_quality }}%
+            </div>
+
+            <div class="summary-small">
+                Overall requirement quality
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                High Risk
+            </div>
+
+            <div class="summary-value">
+                {{ summary.high_risk }}
+            </div>
+
+            <div class="summary-small">
+                Requirements requiring attention
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                Critical
+            </div>
+
+            <div class="summary-value">
+                {{ summary.critical }}
+            </div>
+
+            <div class="summary-small">
+                Critical priority requirements
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                Security
+            </div>
+
+            <div class="summary-value">
+                {{ summary.security }}
+            </div>
+
+            <div class="summary-small">
+                Security-related requirements
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                Test Cases
+            </div>
+
+            <div class="summary-value">
+                {{ summary.test_cases }}
+            </div>
+
+            <div class="summary-small">
+                Automatically generated
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CONTROLS
+    ================================================== -->
+
+    <div class="controls">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search requirement ID or text..."
+            onkeyup="filterTable()"
+        >
+
+
+        <select
+            id="typeFilter"
+            onchange="filterTable()"
+        >
+
+            <option value="all">
+                All Types
+            </option>
+
+            <option value="functional">
+                Functional
+            </option>
+
+            <option value="performance">
+                Performance
+            </option>
+
+            <option value="security">
+                Security
+            </option>
+
+            <option value="usability">
+                Usability
+            </option>
+
+        </select>
+
+
+        <select
+            id="riskFilter"
+            onchange="filterTable()"
+        >
+
+            <option value="all">
+                All Risks
+            </option>
+
+            <option value="low">
+                Low
+            </option>
+
+            <option value="medium">
+                Medium
+            </option>
+
+            <option value="high">
+                High
+            </option>
+
+        </select>
+
+
+        <a
+            href="{{ url_for('export_excel') }}"
+            class="btn"
+        >
+            Export Excel
+        </a>
+
+
+        <a
+            href="{{ url_for('export_csv') }}"
+            class="btn secondary"
+        >
+            Export CSV
+        </a>
+
+    </div>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    <div class="table-card">
+
+
+        <div class="table-header">
+
+            <h3>
+                Complete Traceability
+            </h3>
+
+            <span id="visibleCount">
+                {{ summary.total }} requirements
+            </span>
+
+        </div>
+
+
+        {% if traceability_data %}
+
+
+        <div class="table-wrapper">
+
+            <table id="traceabilityTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Requirement ID
+                        </th>
+
+                        <th>
+                            Requirement
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Quality
+                        </th>
+
+                        <th>
+                            Risk
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                        <th>
+                            Security
+                        </th>
+
+                        <th>
+                            Performance
+                        </th>
+
+                        <th>
+                            Ambiguity
+                        </th>
+
+                        <th>
+                            Contradiction
+                        </th>
+
+                        <th>
+                            Duplicate
+                        </th>
+
+                        <th>
+                            Test Cases
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% for req in traceability_data %}
+
+                    <tr
+                        data-type="{{ req.requirement_type|lower }}"
+                        data-risk="{{ req.risk|lower }}"
+                    >
+
+
+                        <!-- ID -->
+
+                        <td>
+
+                            <span class="req-id">
+
+                                {{ req.requirement_id }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- Requirement -->
+
+                        <td>
+
+                            <div class="requirement-text">
+
+                                {{ req.requirement }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- Type -->
+
+                        <td>
+
+                            {% set type_class =
+                                req.requirement_type|lower
+                            %}
+
+                            <span
+                                class="badge {{ type_class }}"
+                            >
+
+                                {{ req.requirement_type }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- Quality -->
+
+                        <td>
+
+                            <div class="quality-box">
+
+                                <div class="quality-number">
+
+                                    {{ req.quality_score }}%
+
+                                </div>
+
+                                <div class="progress">
+
+                                    <div
+                                        class="progress-bar"
+                                        style="width: {{ req.quality_score }}%;"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- Risk -->
+
+                        <td>
+
+                            <span
+                                class="badge {{ req.risk|lower }}"
+                            >
+
+                                {{ req.risk }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- Priority -->
+
+                        <td>
+
+                            <span
+                                class="badge
+                                {% if req.priority == 'Critical' %}
+                                    critical
+                                {% elif req.priority == 'High' %}
+                                    high
+                                {% elif req.priority == 'Medium' %}
+                                    medium
+                                {% else %}
+                                    low
+                                {% endif %}"
+                            >
+
+                                {{ req.priority }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- Security -->
+
+                        <td>
+
+                            {% if req.security %}
+
+                                <span class="yes">
+                                    ✓ Yes
+                                </span>
+
+                            {% else %}
+
+                                <span class="no">
+                                    — No
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Performance -->
+
+                        <td>
+
+                            {% if req.performance %}
+
+                                <span class="yes">
+                                    ✓ Yes
+                                </span>
+
+                            {% else %}
+
+                                <span class="no">
+                                    — No
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Ambiguity -->
+
+                        <td>
+
+                            {% if req.ambiguity %}
+
+                                <span class="yes">
+                                    ⚠ Yes
+                                </span>
+
+                            {% else %}
+
+                                <span class="no">
+                                    — No
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Contradiction -->
+
+                        <td>
+
+                            {% if req.contradiction %}
+
+                                <span class="yes">
+                                    ⚠ Detected
+                                </span>
+
+                            {% else %}
+
+                                <span class="no">
+                                    ✓ Clear
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Duplicate -->
+
+                        <td>
+
+                            {% if req.duplicate %}
+
+                                <span class="yes">
+                                    ⚠ Duplicate
+                                </span>
+
+                            {% else %}
+
+                                <span class="no">
+                                    ✓ Unique
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Test Cases -->
+
+                        <td>
+
+                            <a
+                                href="{{ url_for('test_cases') }}"
+                                class="test-count"
+                            >
+
+                                {{ req.test_case_count }}
+
+                            </a>
+
+                        </td>
+
+
+                    </tr>
+
+                {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                📋
+            </div>
+
+            <h3>
+                No Requirements Available
+            </h3>
+
+            <p>
+                Upload a requirements document first
+                to generate the traceability matrix.
+            </p>
+
+            <br>
+
+            <a
+                href="{{ url_for('index') }}"
+                class="btn"
+            >
+                Upload Requirements
+            </a>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    IntelliReq © 2026
+    <br>
+    Intelligent NLP-Based Software Requirements Analysis
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+function filterTable() {
+
+    const search =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const type =
+        document
+        .getElementById("typeFilter")
+        .value
+        .toLowerCase();
+
+    const risk =
+        document
+        .getElementById("riskFilter")
+        .value
+        .toLowerCase();
+
+
+    const rows =
+        document
+        .querySelectorAll(
+            "#traceabilityTable tbody tr"
+        );
+
+
+    let visible = 0;
+
+
+    rows.forEach(function(row) {
+
+        const rowText =
+            row.innerText.toLowerCase();
+
+        const rowType =
+            row.dataset.type;
+
+        const rowRisk =
+            row.dataset.risk;
+
+
+        const matchesSearch =
+            rowText.includes(search);
+
+
+        const matchesType =
+            type === "all"
+            || rowType === type;
+
+
+        const matchesRisk =
+            risk === "all"
+            || rowRisk === risk;
+
+
+        if (
+            matchesSearch
+            && matchesType
+            && matchesRisk
+        ) {
+
+            row.style.display = "";
+
+            visible++;
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+
+    document
+        .getElementById("visibleCount")
+        .innerText =
+            visible + " requirements";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

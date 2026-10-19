@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>IntelliReq - Multi Format Input</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #f8fafc
+                );
+
+            min-height: 100vh;
+
+            color: #172033;
+        }
+
+        .navbar {
+
+            background: #111827;
+
+            color: white;
+
+            padding: 18px 40px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .logo {
+
+            font-size: 23px;
+
+            font-weight: bold;
+        }
+
+        .logo span {
+
+            color: #60a5fa;
+        }
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 22px;
+        }
+
+        .nav-links a {
+
+            color: #dbeafe;
+
+            text-decoration: none;
+
+            font-size: 14px;
+        }
+
+        .container {
+
+            max-width: 1050px;
+
+            margin: 50px auto;
+
+            padding: 20px;
+        }
+
+        .hero {
+
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+        .hero h1 {
+
+            font-size: 38px;
+
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+
+            color: #64748b;
+
+            font-size: 17px;
+        }
+
+        .upload-card {
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 40px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(15, 23, 42, 0.10);
+
+            text-align: center;
+        }
+
+        .drop-zone {
+
+            border: 2px dashed #93c5fd;
+
+            border-radius: 18px;
+
+            padding: 55px 25px;
+
+            background: #f8fbff;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .drop-zone:hover {
+
+            border-color: #2563eb;
+
+            background: #eff6ff;
+        }
+
+        .upload-icon {
+
+            font-size: 55px;
+
+            margin-bottom: 15px;
+        }
+
+        .drop-zone h2 {
+
+            margin: 8px 0;
+
+            font-size: 22px;
+        }
+
+        .drop-zone p {
+
+            color: #64748b;
+
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+
+            display: none;
+        }
+
+        .file-button {
+
+            display: inline-block;
+
+            padding: 13px 25px;
+
+            background: #2563eb;
+
+            color: white;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .selected-file {
+
+            margin-top: 18px;
+
+            font-weight: bold;
+
+            color: #2563eb;
+        }
+
+        .formats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(140px, 1fr)
+                );
+
+            gap: 15px;
+
+            margin-top: 30px;
+        }
+
+        .format-card {
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            background: #f8fafc;
+
+            border: 1px solid #e2e8f0;
+        }
+
+        .format-card .icon {
+
+            font-size: 30px;
+
+            margin-bottom: 7px;
+        }
+
+        .format-card strong {
+
+            display: block;
+
+            margin-bottom: 5px;
+        }
+
+        .format-card small {
+
+            color: #64748b;
+        }
+
+        .analyze-button {
+
+            margin-top: 30px;
+
+            width: 100%;
+
+            padding: 16px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #111827;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .analyze-button:hover {
+
+            background: #1e293b;
+        }
+
+        .error {
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            text-align: left;
+        }
+
+        .info-box {
+
+            margin-top: 25px;
+
+            padding: 18px;
+
+            background: #eff6ff;
+
+            border-radius: 12px;
+
+            color: #1e40af;
+
+            text-align: left;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        Intelli<span>Req</span>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('index') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('results') }}">
+            Results
+        </a>
+
+        <a href="{{ url_for('traceability') }}">
+            Traceability
+        </a>
+
+        <a href="{{ url_for('test_cases') }}">
+            Test Cases
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="hero">
+
+        <h1>
+            📄 Multi-Format Requirement Input
+        </h1>
+
+        <p>
+            Upload requirements from different sources
+            and let IntelliReq automatically analyze them.
+        </p>
+
+    </div>
+
+
+    <div class="upload-card">
+
+        {% if error %}
+
+        <div class="error">
+            ⚠️ {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <form
+            action="{{ url_for('upload') }}"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <label
+                class="drop-zone"
+                for="fileInput"
+            >
+
+                <div class="upload-icon">
+                    📤
+                </div>
+
+                <h2>
+                    Upload your requirements
+                </h2>
+
+                <p>
+                    Drag and drop your file here
+                    or select a file
+                </p>
+
+                <span class="file-button">
+                    Choose File
+                </span>
+
+                <input
+                    id="fileInput"
+                    type="file"
+                    name="file"
+                    accept=".pdf,.docx,.txt,.csv,.eml"
+                    required
+                    onchange="showFileName(this)"
+                >
+
+                <div
+                    class="selected-file"
+                    id="fileName"
+                >
+                </div>
+
+            </label>
+
+
+            <div class="formats">
+
+                <div class="format-card">
+
+                    <div class="icon">📕</div>
+
+                    <strong>PDF</strong>
+
+                    <small>
+                        Requirement documents
+                    </small>
+
+                </div>
+
+
+                <div class="format-card">
+
+                    <div class="icon">📝</div>
+
+                    <strong>DOCX</strong>
+
+                    <small>
+                        Word documents
+                    </small>
+
+                </div>
+
+
+                <div class="format-card">
+
+                    <div class="icon">📃</div>
+
+                    <strong>TXT</strong>
+
+                    <small>
+                        Plain text
+                    </small>
+
+                </div>
+
+
+                <div class="format-card">
+
+                    <div class="icon">📊</div>
+
+                    <strong>CSV</strong>
+
+                    <small>
+                        Requirement datasets
+                    </small>
+
+                </div>
+
+
+                <div class="format-card">
+
+                    <div class="icon">📧</div>
+
+                    <strong>EMAIL</strong>
+
+                    <small>
+                        .eml email files
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <strong>
+                    🤖 Intelligent Processing
+                </strong>
+
+                <br><br>
+
+                IntelliReq automatically extracts
+                requirements, detects user stories,
+                converts them into requirement statements,
+                and sends them through the complete
+                AI analysis pipeline.
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="analyze-button"
+            >
+                🚀 Upload & Analyze Requirements
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function showFileName(input) {
+
+    const fileName =
+        document.getElementById(
+            "fileName"
+        );
+
+    if (
+        input.files &&
+        input.files.length > 0
+    ) {
+
+        fileName.innerHTML =
+            "Selected: " +
+            input.files[0].name;
+
+    } else {
+
+        fileName.innerHTML = "";
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>

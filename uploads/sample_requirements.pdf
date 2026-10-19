@@ -1,0 +1,9 @@
+The system shall allow users to register using their email address.
+
+The system shall allow users to login using a username and password.
+
+The system shall respond to user requests within 3 seconds.
+
+The system shall encrypt user passwords.
+
+The system should be easy to use.

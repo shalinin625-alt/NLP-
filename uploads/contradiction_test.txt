@@ -1,0 +1,9 @@
+The system shall allow users to change their password.
+
+The system shall not allow users to change their password.
+
+The system shall allow users to login using a username and password.
+
+The system shall encrypt user passwords.
+
+The system should be easy to use.
